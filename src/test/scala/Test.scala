@@ -1,20 +1,25 @@
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop._
 import org.scalacheck._
 import org.scalacheck.Shapeless._
 
-sealed trait Tree
-case object A extends Tree
-case object B extends Tree // Note: comment out this line and everything works as expected
-case class Node(children: Map[String, Tree]) extends Tree
+sealed trait Foo
+case object A extends Foo
+case object B extends Foo
 
 object Test extends Properties("whatevs") {
 
-  property("successful prop") = forAll { (x: Tree) =>
+  property("successful prop") = forAll { (x: Foo) =>
     true
   }
 
-  property("failing prop") = forAll { (x: Tree) =>
+  property("failing prop without shrinking") = forAllNoShrink { (x: Foo) =>
     false
   }
+
+  property("failing prop with shrinking") = forAll { (x: Foo) =>
+    println(x)
+    false
+  }
+
 
 }
